@@ -18,6 +18,7 @@ write = $(MAKE_PLATFORM_UTILS) --in $(1) --out $(2)
 append = $(MAKE_PLATFORM_UTILS) --in $(1) --append $(2)
 path-dirname = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --dirname --print))
 path-basename = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --basename --print))
+path-absolute = $(subst \\,/,$(subst :,\:,$(abspath $(1))))
 
 ifeq ($(strip $(PLATFORM_ID)),windows)
     RM ?= del /Q /F
