@@ -283,6 +283,7 @@ class CommandProcessor:
         """Set the input for the next command"""
         if self.current_output != "":
             self.current_output += "\n"
+        input = input.replace("\\n", "\n").replace("\\t", "\t").replace("\\r", "\r")
         self.current_output += input
         return CommandResults.Ok
 
