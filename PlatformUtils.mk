@@ -14,8 +14,8 @@ lower = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --lower --print))
 upper = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --upper --print))
 exists = $(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --exists --print))
 latest = $(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --glob --sort asc --last --print))
-write = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --out $(2)))
-append = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --append $(2)))
+write = $(MAKE_PLATFORM_UTILS) --in $(1) --out $(2)
+append = $(MAKE_PLATFORM_UTILS) --in $(1) --append $(2)
 
 ifeq ($(strip $(PLATFORM_ID)),windows)
     RM ?= del /Q /F
