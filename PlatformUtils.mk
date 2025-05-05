@@ -16,6 +16,8 @@ exists = $(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --
 latest = $(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --glob --sort asc --last --print))
 write = $(MAKE_PLATFORM_UTILS) --in $(1) --out $(2)
 append = $(MAKE_PLATFORM_UTILS) --in $(1) --append $(2)
+path-dirname = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --dirname --print))
+path-basename = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --basename --print))
 
 ifeq ($(strip $(PLATFORM_ID)),windows)
     RM ?= del /Q /F
