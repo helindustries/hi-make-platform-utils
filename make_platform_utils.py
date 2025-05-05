@@ -809,6 +809,25 @@ class CommandProcessor:
             self.current_output = ":".join(lines)
         return CommandResults.Ok
 
+    @Command("--dirname", desc="Get the directory name")
+    def dirname(self) -> int:
+        """Get the directory name of the input"""
+        lines = self.current_output.splitlines()
+        new_lines = []
+        for line in lines:
+            new_lines.append(os.path.dirname(line.strip()))
+        self.current_output = "\n".join(new_lines)
+        return CommandResults.Ok
+    @Command("--basename", desc="Get the base name")
+    def basename(self) -> int:
+        """Get the base name of the input"""
+        lines = self.current_output.splitlines()
+        new_lines = []
+        for line in lines:
+            new_lines.append(os.path.basename(line.strip()))
+        self.current_output = "\n".join(new_lines)
+        return CommandResults.Ok
+
     @Command("--touch", desc="Create a file or update its timestamp", param_names=["PATH"])
     def touch(self, path: str) -> int:
         """Create a file or update its timestamp"""
