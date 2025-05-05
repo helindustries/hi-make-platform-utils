@@ -44,9 +44,10 @@ class CommandResults:
     InvalidSortFlag: ClassVar[int] = 14
     InvalidSortColumn: ClassVar[int] = 15
     InvalidSortValue: ClassVar[int] = 16
-    InvalidSumValue: ClassVar[int] = 17
-    InvalidFilterFlag: ClassVar[int] = 18
-    Not: ClassVar[int] = 19
+    InvalidSumFlag: ClassVar[int] = 17
+    InvalidSumValue: ClassVar[int] = 18
+    InvalidFilterFlag: ClassVar[int] = 19
+    Not: ClassVar[int] = 20
     @classmethod
     def check(cls, result: int) -> bool:
         return result >= cls.Ok and result <= cls.Not
@@ -696,7 +697,7 @@ class CommandProcessor:
                         return CommandResults.InvalidSortColumn
             else:
                 print(f"Unknown sum flag: {flag}")
-                return CommandResults.InvalidSortFlag
+                return CommandResults.InvalidSumFlag
         def get_value(line: str) -> Any:
             if isinstance(column, int):
                 split_line = re.split("[ \t]+", line)
