@@ -13,18 +13,45 @@ PLATFORM_ID := $(strip $(shell $(MAKE_PLATFORM_UTILS) --platform --lower --print
 PLATFORM_EXEC := $(strip $(shell $(MAKE_PLATFORM_UTILS) --platform-exec --print))
 PLATFORM_OPEN := $(strip $(shell $(MAKE_PLATFORM_UTILS) --platform-open --print))
 
-env-path = $(strip $(shell $(MAKE_PLATFORM_UTILS) $(1:%=--in "%") --env-path --print))
-platform-path = $(strip $(shell $(MAKE_PLATFORM_UTILS) $(1:%=--in "%") --platform-path --print))
-shell-list = $(strip $(shell $(MAKE_PLATFORM_UTILS) $(1:%=--in "%") --shell-list --print))
-lower = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --lower --print))
-upper = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --upper --print))
-exists = $(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --exists --print))
-latest = $(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --glob --sort asc --last --print))
-write = $(MAKE_PLATFORM_UTILS) --in $(1) --out $(2)
-append = $(MAKE_PLATFORM_UTILS) --in $(1) --append $(2)
-path-dirname = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --dirname --print))
-path-basename = $(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --basename --print))
-path-absolute = $(subst \\,/,$(subst :,\:,$(abspath $(1))))
+# Definitions that are not indented are so on purpose, as the result would be added to
+# the result value of the call! For Windows and MinGW compatibility, we don't use the
+# `func := foo $(1)` shorthand!
+define env-path
+$(strip $(shell $(MAKE_PLATFORM_UTILS) $(1:%=--in "%") --env-path --print))
+endef
+define platform-path
+$(strip $(shell $(MAKE_PLATFORM_UTILS) $(1:%=--in "%") --platform-path --print))
+endef
+define shell-list
+$(strip $(shell $(MAKE_PLATFORM_UTILS) $(1:%=--in "%") --shell-list --print))
+endef
+define lower
+$(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --lower --print))
+endef
+define upper
+$(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --upper --print))
+endef
+define exists
+$(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --exists --print))
+endef
+define latest
+$(strip $(shell $(MAKE_PLATFORM_UTILS) --stoponerror false --in $(1) --glob --sort asc --last --print))
+endef
+define write
+    $(MAKE_PLATFORM_UTILS) --in $(1) --out $(2)
+endef
+define append
+    $(MAKE_PLATFORM_UTILS) --in $(1) --append $(2)
+endef
+define path-dirname
+$(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --dirname --print))
+endef
+define path-basename
+$(strip $(shell $(MAKE_PLATFORM_UTILS) --in $(1) --basename --print))
+endef
+define path-absolute
+$(subst \\,/,$(subst :,\:,$(abspath $(1))))
+endef
 
 ifeq ($(strip $(PLATFORM_ID)),windows)
     RM ?= del /Q /F
