@@ -1,7 +1,13 @@
 PLATFORM_MAKEFILE_DIR := $(patsubst %/,%,$(dir $(abspath $(lastword $(MAKEFILE_LIST)))))
 PLATFORM_UTILS_PRESENT := yes
+
+# This is a chicken-and-egg problem, since we need Python for the `which` command as well
+# as running make_platform_utils.py. We can assume that if someone cares about the Python
+# version we use here, they will have it set up in their environment or in their Makefile
+# before including this.
 PYTHON ?= python
 MAKE_PLATFORM_UTILS ?= $(PYTHON) "$(PLATFORM_MAKEFILE_DIR)/make_platform_utils.py"
+
 PLATFORM := $(strip $(shell $(MAKE_PLATFORM_UTILS) --platform --print))
 PLATFORM_ID := $(strip $(shell $(MAKE_PLATFORM_UTILS) --platform --lower --print))
 PLATFORM_EXEC := $(strip $(shell $(MAKE_PLATFORM_UTILS) --platform-exec --print))
@@ -24,7 +30,7 @@ ifeq ($(strip $(PLATFORM_ID)),windows)
     RM ?= del /Q /F
     RMDIR ?= rmdir /S /Q
     LS ?= dir /B
-    WHICH ?= where
+    WHICH ?= $(PYTHON) -c "import shutil, sys; print(shutil.which(sys.argv[1]) or '')"
     COPY ?= copy /Y
     MOVE ?= move /Y
     TOUCH ?= $(MAKE_PLATFORM_UTILS) --touch
