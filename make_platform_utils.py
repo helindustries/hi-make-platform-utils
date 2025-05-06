@@ -5,13 +5,15 @@
 #
 # The implementation is not using generators, because it makes the code simpler and more explicit for
 # now and the negative impact on memory is currently not worth the effort.
+import glob
 import os
 import re
-import sys
-import glob
 import shutil
 import subprocess
+import sys
+
 from datetime import datetime
+from pathlib import Path
 from typing import Optional, Any, ClassVar, Union, TextIO, List, Dict, Callable, Tuple
 
 # <editor-fold desc="Python 3.9- Compatibility">
@@ -26,6 +28,10 @@ def removesuffix(string: str, suffix: str) -> str:
         return string[:-len(suffix)]
     return string
 # </editor-fold>
+
+def posixpath(path: str) -> str:
+    return str(Path(next(iter(glob.glob(path)))).as_posix())
+
 class CommandResults:
     Ok: ClassVar[int] = 0
     UndefinedError: ClassVar[int] = 1
@@ -699,6 +705,7 @@ class CommandProcessor:
             else:
                 print(f"Unknown sum flag: {flag}")
                 return CommandResults.InvalidSumFlag
+
         def get_value(line: str) -> Any:
             if isinstance(column, int):
                 split_line = re.split("[ \t]+", line)
@@ -886,7 +893,7 @@ class CommandProcessor:
         lines = self.current_output.splitlines()
         new_lines = []
         for line in lines:
-            results = glob.glob(line)
+            results = [posixpath(p) for p in glob.glob(line.strip())]
             if len(results) > 0:
                 new_lines.extend(results)
             elif self.stop_on_error:
